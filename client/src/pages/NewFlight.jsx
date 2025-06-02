@@ -14,7 +14,7 @@ const NewFlight = () => {
     const fetchUserData = async () =>{
       try{
         const id = localStorage.getItem('userId');
-        await axios.get(${process.env.REACT_APP_API_URL}/fetch-user/${id}`).then(
+        await axios.get(`${process.env.REACT_APP_API_URL}/fetch-user/${id}`).then(
           (response)=>{
             setUserDetails(response.data);
             console.log(response.data);

@@ -20,7 +20,7 @@ const AllBookings = () => {
   }
 
   const cancelTicket = async (id) =>{
-    await axios.put(${process.env.REACT_APP_API_URL}/cancel-ticket/${id}`).then(
+    await axios.put(`${process.env.REACT_APP_API_URL}/cancel-ticket/${id}`).then(
       (response)=>{
         alert("Ticket cancelled!!");
         fetchBookings();

@@ -26,7 +26,7 @@ const EditFlight = () => {
     }, [])
   
     const fetchFlightData = async () =>{
-      await axios.get(${process.env.REACT_APP_API_URL}/fetch-flight/${id}`).then(
+      await axios.get(`${process.env.REACT_APP_API_URL}/fetch-flight/${id}`).then(
         (response) =>{
           console.log(response.data);
           setFlightName(response.data.flightName);

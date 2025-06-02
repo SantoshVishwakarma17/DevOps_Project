@@ -11,7 +11,7 @@ const FlightBookings = () => {
   const fetchUserData = async () =>{
     try{
       const id = localStorage.getItem('userId');
-      await axios.get(${process.env.REACT_APP_API_URL}/fetch-user/${id}`).then(
+      await axios.get(`${process.env.REACT_APP_API_URL}/fetch-user/${id}`).then(
         (response)=>{
           setUserDetails(response.data);
           console.log(response.data);
@@ -40,7 +40,7 @@ const FlightBookings = () => {
   }
 
   const cancelTicket = async (id) =>{
-    await axios.put(${process.env.REACT_APP_API_URL}/cancel-ticket/${id}`).then(
+    await axios.put(`${process.env.REACT_APP_API_URL}/cancel-ticket/${id}`).then(
       (response)=>{
         alert("Ticket cancelled!!");
         fetchBookings();
