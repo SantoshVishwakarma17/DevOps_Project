@@ -15,13 +15,15 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 // mongoose setup
+// const mongoose = require("mongoose");
 
-const PORT = 6001;
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}
-).then(() => {
+const mongoURI = process.env.MONGO_URL || "mongodb://mongo:27017/FlightBookingMERN";
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
 
     // All the client-server activites
 
