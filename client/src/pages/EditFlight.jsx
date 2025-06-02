@@ -26,7 +26,7 @@ const EditFlight = () => {
     }, [])
   
     const fetchFlightData = async () =>{
-      await axios.get(`\`${process.env.REACT_APP_BACKEND_URL}\`/fetch-flight/${id}`).then(
+      await axios.get(`\`${process.env.REACT_APP_API_URL}\`/fetch-flight/${id}`).then(
         (response) =>{
           console.log(response.data);
           setFlightName(response.data.flightName);
@@ -63,7 +63,7 @@ const EditFlight = () => {
       const inputs = {_id: id,flightName, flightId, origin, destination, 
         departureTime: startTime, arrivalTime, basePrice, totalSeats};
   
-      await axios.put('\`${process.env.REACT_APP_BACKEND_URL}\`/update-flight', inputs).then(
+      await axios.put('\`${process.env.REACT_APP_API_URL}\`/update-flight', inputs).then(
         async (response)=>{
           alert('Flight updated successfully!!');
           setFlightName('');

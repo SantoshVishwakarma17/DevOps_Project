@@ -12,7 +12,7 @@ const Flights = () => {
   const fetchUserData = async () =>{
     try{
       const id = localStorage.getItem('userId');
-      await axios.get(`\`${process.env.REACT_APP_BACKEND_URL}\`/fetch-user/${id}`).then(
+      await axios.get(`\`${process.env.REACT_APP_API_URL}\`/fetch-user/${id}`).then(
         (response)=>{
           setUserDetails(response.data);
           console.log(response.data);
@@ -29,7 +29,7 @@ const Flights = () => {
 
   
   const fetchFlights = async () =>{
-    await axios.get(`${process.env.REACT_APP_BACKEND_URL}/fetch-flights`).then(
+    await axios.get(`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
       (response)=>{
         setFlights(response.data);
         console.log(response.data)

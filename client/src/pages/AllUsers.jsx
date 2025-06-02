@@ -12,7 +12,7 @@ const AllUsers = () => {
   },[]);
 
   const fetchUsers = async () =>{
-    await axios.get('\`${process.env.REACT_APP_BACKEND_URL}\`/fetch-users').then(
+    await axios.get('\`${process.env.REACT_APP_API_URL}\`/fetch-users').then(
       (response) =>{
         setUsers(response.data);
       }
