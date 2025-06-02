@@ -9,7 +9,7 @@ const AllFlights = () => {
   
     
     const fetchFlights = async () =>{
-      await axios.get(`'\`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
+      await axios.get(`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
         (response)=>{
           setFlights(response.data);
           console.log(response.data)

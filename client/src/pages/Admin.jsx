@@ -30,7 +30,7 @@ const Admin = () => {
         setbookingCount(response.data.length);
       }
     );
-    await axios.get(`'\`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
+    await axios.get(`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
       (response)=>{
         setFlightsCount(response.data.length);
       }

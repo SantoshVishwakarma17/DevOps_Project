@@ -42,7 +42,7 @@ const FlightAdmin = () => {
         setbookingCount(response.data.filter(booking => booking.flightName === localStorage.getItem('username')).length);
       }
     );
-    await axios.get(`'\`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
+    await axios.get(`${process.env.REACT_APP_API_URL}/fetch-flights`).then(
       (response)=>{
         setFlightsCount(response.data.filter(booking => booking.flightName === localStorage.getItem('username')).length);
       }
