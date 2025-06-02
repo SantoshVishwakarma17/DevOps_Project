@@ -12,7 +12,7 @@ const AllBookings = () => {
   }, [])
 
   const fetchBookings = async () =>{
-    await axios.get('http://localhost:6001/fetch-bookings').then(
+    await axios.get('\`${process.env.REACT_APP_BACKEND_URL}\`/fetch-bookings').then(
       (response)=>{
         setBookings(response.data.reverse());
       }
@@ -20,7 +20,7 @@ const AllBookings = () => {
   }
 
   const cancelTicket = async (id) =>{
-    await axios.put(`http://localhost:6001/cancel-ticket/${id}`).then(
+    await axios.put(`\`${process.env.REACT_APP_BACKEND_URL}\`/cancel-ticket/${id}`).then(
       (response)=>{
         alert("Ticket cancelled!!");
         fetchBookings();

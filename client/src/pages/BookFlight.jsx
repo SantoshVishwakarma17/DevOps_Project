@@ -20,7 +20,7 @@ const BookFlight = () => {
     }, [])
   
     const fetchFlightData = async () =>{
-      await axios.get(`http://localhost:6001/fetch-flight/${id}`).then(
+      await axios.get(`\`${process.env.REACT_APP_BACKEND_URL}\`/fetch-flight/${id}`).then(
         (response) =>{
           setFlightName(response.data.flightName);
           setFlightId(response.data.flightId);
@@ -77,7 +77,7 @@ const BookFlight = () => {
                                                   email, mobile, passengers: passengerDetails, totalPrice, 
                                                   journeyDate, seatClass: coachType} 
       
-      await axios.post('http://localhost:6001/book-ticket', inputs).then(
+      await axios.post('\`${process.env.REACT_APP_BACKEND_URL}\`/book-ticket', inputs).then(
         (response)=>{
           alert("booking successful");
           navigate('/bookings');

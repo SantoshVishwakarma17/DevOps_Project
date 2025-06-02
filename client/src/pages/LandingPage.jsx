@@ -38,7 +38,7 @@ const LandingPage = () => {
         const date2 = new Date(returnDate);
         if(date1 > date && date2 > date1){
           setError("");
-          await axios.get('http://localhost:6001/fetch-flights').then(
+          await axios.get(`${process.env.REACT_APP_BACKEND_URL}/fetch-flights`).then(
               (response)=>{
                 setFlights(response.data);
                 console.log(response.data)
@@ -52,7 +52,7 @@ const LandingPage = () => {
         const date1 = new Date(departureDate);
         if(date1 >= date){
           setError("");
-          await axios.get('http://localhost:6001/fetch-flights').then(
+          await axios.get(`${process.env.REACT_APP_BACKEND_URL}/fetch-flights`).then(
               (response)=>{
                 setFlights(response.data);
                 console.log(response.data)
