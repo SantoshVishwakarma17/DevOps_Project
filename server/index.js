@@ -4,23 +4,24 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import { User, Booking, Flight } from './schemas.js';
-
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
-app.use(bodyParser.json({limit: "30mb", extended: true}))
-app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
+app.use(bodyParser.json({ limit: "30mb", extended: true }))
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 // mongoose setup
 
 const PORT = 6001;
-mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', { 
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }
-).then(()=>{
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}
+).then(() => {
 
     // All the client-server activites
 
@@ -29,13 +30,13 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
         const { username, email, usertype, password } = req.body;
         let approval = 'approved';
         try {
-          
+
             const existingUser = await User.findOne({ email });
             if (existingUser) {
                 return res.status(400).json({ message: 'User already exists' });
             }
 
-            if(usertype === 'flight-operator'){
+            if (usertype === 'flight-operator') {
                 approval = 'not-approved'
             }
 
@@ -47,8 +48,8 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
             return res.status(201).json(userCreated);
 
         } catch (error) {
-          console.log(error);
-          return res.status(500).json({ message: 'Server Error' });
+            console.log(error);
+            return res.status(500).json({ message: 'Server Error' });
         }
     });
 
@@ -57,51 +58,51 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
         try {
 
             const user = await User.findOne({ email });
-    
+
             if (!user) {
                 return res.status(401).json({ message: 'Invalid email or password' });
             }
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return res.status(401).json({ message: 'Invalid email or password' });
-            } else{
-                
+            } else {
+
                 return res.json(user);
             }
-          
+
         } catch (error) {
-          console.log(error);
-          return res.status(500).json({ message: 'Server Error' });
+            console.log(error);
+            return res.status(500).json({ message: 'Server Error' });
         }
     });
-      
+
 
     // Approve flight operator
 
-    app.post('/approve-operator', async(req, res)=>{
-        const {id} = req.body;
-        try{
-            
+    app.post('/approve-operator', async (req, res) => {
+        const { id } = req.body;
+        try {
+
             const user = await User.findById(id);
             user.approval = 'approved';
             await user.save();
-            res.json({message: 'approved!'})
-        }catch(err){
+            res.json({ message: 'approved!' })
+        } catch (err) {
             res.status(500).json({ message: 'Server Error' });
         }
     })
 
     // reject flight operator
 
-    app.post('/reject-operator', async(req, res)=>{
-        const {id} = req.body;
-        try{
-            
+    app.post('/reject-operator', async (req, res) => {
+        const { id } = req.body;
+        try {
+
             const user = await User.findById(id);
             user.approval = 'rejected';
             await user.save();
-            res.json({message: 'rejected!'})
-        }catch(err){
+            res.json({ message: 'rejected!' })
+        } catch (err) {
             res.status(500).json({ message: 'Server Error' });
         }
     })
@@ -109,57 +110,59 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
 
     // fetch user
 
-    app.get('/fetch-user/:id', async (req, res)=>{
+    app.get('/fetch-user/:id', async (req, res) => {
         const id = await req.params.id;
         console.log(req.params.id)
-        try{
+        try {
             const user = await User.findById(req.params.id);
             console.log(user);
             res.json(user);
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
 
     // fetch all users
 
-    app.get('/fetch-users', async (req, res)=>{
+    app.get('/fetch-users', async (req, res) => {
 
-        try{
+        try {
             const users = await User.find();
             res.json(users);
 
-        }catch(err){
-            res.status(500).json({message: 'error occured'});
+        } catch (err) {
+            res.status(500).json({ message: 'error occured' });
         }
     })
 
 
     // Add flight
 
-    app.post('/add-flight', async (req, res)=>{
-        const {flightName, flightId, origin, destination, departureTime, 
-                                arrivalTime, basePrice, totalSeats} = req.body;
-        try{
+    app.post('/add-flight', async (req, res) => {
+        const { flightName, flightId, origin, destination, departureTime,
+            arrivalTime, basePrice, totalSeats } = req.body;
+        try {
 
-            const flight = new Flight({flightName, flightId, origin, destination, 
-                                        departureTime, arrivalTime, basePrice, totalSeats});
+            const flight = new Flight({
+                flightName, flightId, origin, destination,
+                departureTime, arrivalTime, basePrice, totalSeats
+            });
             const newFlight = flight.save();
 
-            res.json({message: 'flight added'});
+            res.json({ message: 'flight added' });
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
 
     // update flight
-    
-    app.put('/update-flight', async (req, res)=>{
-        const {_id, flightName, flightId, origin, destination, 
-                    departureTime, arrivalTime, basePrice, totalSeats} = req.body;
-        try{
+
+    app.put('/update-flight', async (req, res) => {
+        const { _id, flightName, flightId, origin, destination,
+            departureTime, arrivalTime, basePrice, totalSeats } = req.body;
+        try {
 
             const flight = await Flight.findById(_id)
 
@@ -174,22 +177,22 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
 
             const newFlight = flight.save();
 
-            res.json({message: 'flight updated'});
+            res.json({ message: 'flight updated' });
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
 
     // fetch flights
 
-    app.get('/fetch-flights', async (req, res)=>{
-        
-        try{
+    app.get('/fetch-flights', async (req, res) => {
+
+        try {
             const flights = await Flight.find();
             res.json(flights);
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
@@ -197,57 +200,59 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
 
     // fetch flight
 
-    app.get('/fetch-flight/:id', async (req, res)=>{
+    app.get('/fetch-flight/:id', async (req, res) => {
         const id = await req.params.id;
         console.log(req.params.id)
-        try{
+        try {
             const flight = await Flight.findById(req.params.id);
             console.log(flight);
             res.json(flight);
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
 
     // fetch all bookings
 
-    app.get('/fetch-bookings', async (req, res)=>{
-        
-        try{
+    app.get('/fetch-bookings', async (req, res) => {
+
+        try {
             const bookings = await Booking.find();
             res.json(bookings);
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
 
     // Book ticket
 
-    app.post('/book-ticket', async (req, res)=>{
-        const {user, flight, flightName, flightId,  departure, destination, 
-                    email, mobile, passengers, totalPrice, journeyDate, journeyTime, seatClass} = req.body;
-        try{
-            const bookings = await Booking.find({flight: flight, journeyDate: journeyDate, seatClass: seatClass});
+    app.post('/book-ticket', async (req, res) => {
+        const { user, flight, flightName, flightId, departure, destination,
+            email, mobile, passengers, totalPrice, journeyDate, journeyTime, seatClass } = req.body;
+        try {
+            const bookings = await Booking.find({ flight: flight, journeyDate: journeyDate, seatClass: seatClass });
             const numBookedSeats = bookings.reduce((acc, booking) => acc + booking.passengers.length, 0);
-            
+
             let seats = "";
-            const seatCode = {'economy': 'E', 'premium-economy': 'P', 'business': 'B', 'first-class': 'A'};
+            const seatCode = { 'economy': 'E', 'premium-economy': 'P', 'business': 'B', 'first-class': 'A' };
             let coach = seatCode[seatClass];
-            for(let i = numBookedSeats + 1; i< numBookedSeats + passengers.length+1; i++){
-                if(seats === ""){
+            for (let i = numBookedSeats + 1; i < numBookedSeats + passengers.length + 1; i++) {
+                if (seats === "") {
                     seats = seats.concat(coach, '-', i);
-                }else{
+                } else {
                     seats = seats.concat(", ", coach, '-', i);
                 }
             }
-            const booking = new Booking({user, flight, flightName, flightId, departure, destination, 
-                                            email, mobile, passengers, totalPrice, journeyDate, journeyTime, seatClass, seats});
+            const booking = new Booking({
+                user, flight, flightName, flightId, departure, destination,
+                email, mobile, passengers, totalPrice, journeyDate, journeyTime, seatClass, seats
+            });
             await booking.save();
 
-            res.json({message: 'Booking successful!!'});
-        }catch(err){
+            res.json({ message: 'Booking successful!!' });
+        } catch (err) {
             console.log(err);
         }
     })
@@ -255,15 +260,15 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
 
     // cancel ticket
 
-    app.put('/cancel-ticket/:id', async (req, res)=>{
+    app.put('/cancel-ticket/:id', async (req, res) => {
         const id = await req.params.id;
-        try{
+        try {
             const booking = await Booking.findById(req.params.id);
             booking.bookingStatus = 'cancelled';
             await booking.save();
-            res.json({message: "booking cancelled"});
+            res.json({ message: "booking cancelled" });
 
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     })
@@ -273,8 +278,8 @@ mongoose.connect('mongodb://localhost:27017/FlightBookingMERN', {
 
 
 
-        app.listen(PORT, ()=>{
-            console.log(`Running @ ${PORT}`);
-        });
-    }
-).catch((e)=> console.log(`Error in db connection ${e}`));
+    app.listen(PORT, () => {
+        console.log(`Running @ ${PORT}`);
+    });
+}
+).catch((e) => console.log(`Error in db connection ${e}`));
