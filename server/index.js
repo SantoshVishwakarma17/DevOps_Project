@@ -7,6 +7,7 @@ import { User, Booking, Flight } from './schemas.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const PORT = process.env.PORT || 6001;
 const app = express();
 
 app.use(express.json());
