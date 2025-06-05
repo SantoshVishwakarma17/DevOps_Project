@@ -4,7 +4,7 @@
     position: fixed;
     top: 0vh;
     z-index: 10;
-    background-color: rgba(240, 252, 131, 0.5) !important;
+    background-color: rgba(252, 131, 131, 0.5) !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
