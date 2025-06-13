@@ -16,7 +16,7 @@ const Navbar = () => {
           <>
             <div className="navbar-header">
               <img src={logo} alt="Logo" className="navbar-logo" />
-              <h3>Airline Management System</h3>
+              <h3>Flight Management System</h3>
             </div>
             <div className="nav-options">
               <p onClick={() => navigate('/')}>Home</p>
